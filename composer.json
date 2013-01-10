@@ -1,0 +1,19 @@
+{
+    "name": "moontoast/math",
+    "description": "A mathematics library, providing functionality for large numbers",
+    "type": "library",
+    "keywords": ["math", "bcmath"],
+    "homepage": "https://github.com/moontoast/math",
+    "license": "Apache-2.0",
+    "support": {
+        "issues": "https://github.com/moontoast/math/issues",
+        "source": "https://github.com/moontoast/math"
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "ext-bcmath": "*"
+    },
+    "autoload": {
+        "psr-0": {"Moontoast\\Math": "src/"}
+    }
+}
