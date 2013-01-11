@@ -1,5 +1,7 @@
 # Moontoast Math Library
 
+[![Build Status](https://travis-ci.org/moontoast/math.png)](https://travis-ci.org/moontoast/math)
+
 Moontoast\Math is useful for working with integers that are larger than
 (or may become larger than, through mathematical computations) PHP's max
 integer value for a given system. On 64-bit systems, this number is
