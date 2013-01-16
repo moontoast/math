@@ -68,7 +68,7 @@ echo $bn; // 339532337419071774305803111643925486182
 
 ## License
 
-Copyright &copy; 2012 Moontoast, LLC
+Copyright &copy; 2013 Moontoast, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
