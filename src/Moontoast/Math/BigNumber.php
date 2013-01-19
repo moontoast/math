@@ -178,7 +178,7 @@ class BigNumber
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
      * @return BigNumber for fluent interface
-     * @throws \InvalidArgumentException if $number is zero
+     * @throws Exception\ArithmeticException if $number is zero
      * @link http://www.php.net/bcdiv
      */
     public function divide($number)
@@ -186,7 +186,7 @@ class BigNumber
         $number = $this->filterNumber($number);
 
         if ($number == '0') {
-            throw new \InvalidArgumentException('Division by zero');
+            throw new Exception\ArithmeticException('Division by zero');
         }
 
         $this->numberValue = bcdiv(
@@ -345,7 +345,7 @@ class BigNumber
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
      * @return BigNumber for fluent interface
-     * @throws \InvalidArgumentException if $number is zero
+     * @throws Exception\ArithmeticException if $number is zero
      * @link http://www.php.net/bcmod
      */
     public function mod($number)
@@ -353,7 +353,7 @@ class BigNumber
         $number = $this->filterNumber($number);
 
         if ($number == '0') {
-            throw new \InvalidArgumentException('Division by zero');
+            throw new Exception\ArithmeticException('Division by zero');
         }
 
         $this->numberValue = bcmod(
@@ -431,7 +431,7 @@ class BigNumber
      * @param mixed $mod May be of any type that can be cast to a string
      *                   representation of a base 10 number
      * @return BigNumber for fluent interface
-     * @throws \InvalidArgumentException if $number is zero
+     * @throws Exception\ArithmeticException if $number is zero
      * @link http://www.php.net/bcpowmod
      */
     public function powMod($pow, $mod)
@@ -439,7 +439,7 @@ class BigNumber
         $mod = $this->filterNumber($mod);
 
         if ($mod == '0') {
-            throw new \InvalidArgumentException('Division by zero');
+            throw new Exception\ArithmeticException('Division by zero');
         }
 
         $this->numberValue = bcpowmod(
