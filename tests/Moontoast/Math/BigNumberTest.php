@@ -159,7 +159,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Moontoast\Math\BigNumber::divide
-     * @expectedException InvalidArgumentException
+     * @expectedException Moontoast\Math\Exception\ArithmeticException
      * @expectedExceptionMessage Division by zero
      */
     public function testDivideByZero()
@@ -360,7 +360,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Moontoast\Math\BigNumber::mod
-     * @expectedException InvalidArgumentException
+     * @expectedException Moontoast\Math\Exception\ArithmeticException
      * @expectedExceptionMessage Division by zero
      */
     public function testModDivisionByZero()
@@ -440,7 +440,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Moontoast\Math\BigNumber::powMod
-     * @expectedException InvalidArgumentException
+     * @expectedException Moontoast\Math\Exception\ArithmeticException
      * @expectedExceptionMessage Division by zero
      */
     public function testPowModDivisionByZero()
