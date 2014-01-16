@@ -44,17 +44,26 @@ class BigNumber
     protected $numberScale;
 
     /**
+     * @var bool
+     */
+    protected $mutable;
+
+    /**
      * Constructs a BigNumber object from a string, integer, float, or any
      * object that may be cast to a string, resulting in a numeric string value
      *
-     * @param mixed $number May be of any type that can be cast to a string
-     *                      representation of a base 10 number
-     * @param int $scale (optional) Specifies the default number of digits after the decimal
-     *                   place to be used in operations for this BigNumber
-     * @return void
+     * @param mixed $number  May be of any type that can be cast to a string
+     *                       representation of a base 10 number
+     * @param int   $scale   (optional) Specifies the default number of digits after the decimal
+     *                       place to be used in operations for this BigNumber
+     * @param bool  $mutable (optional) If set to false, a new instance of BigNumber is returned
+     *                       when an operation is done on the instance.
+     *
      */
-    public function __construct($number, $scale = null)
+    public function __construct($number, $scale = null, $mutable = true)
     {
+        $this->mutable = $mutable;
+
         if ($scale) {
             $this->setScale($scale);
         }
@@ -73,6 +82,14 @@ class BigNumber
     }
 
     /**
+     * @return boolean
+     */
+    public function getMutable()
+    {
+        return $this->mutable;
+    }
+
+    /**
      * Sets the current number to the absolute value of itself
      *
      * @return BigNumber for fluent interface
@@ -82,10 +99,26 @@ class BigNumber
         // Use substr() to find the negative sign at the beginning of the
         // number, rather than using signum() to determine the sign.
         if (substr($this->numberValue, 0, 1) === '-') {
-            $this->numberValue = substr($this->numberValue, 1);
+            return $this->assignValue(substr($this->numberValue, 1));
         }
 
-        return $this;
+        return $this->assignValue($this->numberValue);
+    }
+
+    /**
+     * @param $value
+     *
+     * @return $this|BigNumber
+     */
+    protected function assignValue($value)
+    {
+        if ($this->mutable) {
+            $this->numberValue = $value;
+
+            return $this;
+        }
+
+        return self::create($value, $this->getScale(), false);
     }
 
     /**
@@ -93,18 +126,18 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/bcadd
      */
     public function add($number)
     {
-        $this->numberValue = bcadd(
+        return $this->assignValue(bcadd(
             $this->numberValue,
             $this->filterNumber($number),
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -112,6 +145,7 @@ class BigNumber
      * if necessary
      *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/ceil
      */
     public function ceil()
@@ -126,9 +160,7 @@ class BigNumber
             }
         }
 
-        $this->numberValue = bcadd($number, '0', 0);
-
-        return $this;
+        return $this->assignValue(bcadd($number, '0', 0));
     }
 
     /**
@@ -140,6 +172,7 @@ class BigNumber
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
      * @return int
+     *
      * @link http://www.php.net/bccomp
      */
     public function compareTo($number)
@@ -155,6 +188,7 @@ class BigNumber
      * Returns the current value converted to an arbitrary base
      *
      * @param int $base The base to convert the current number to
+     *
      * @return string String representation of the number in the given base
      */
     public function convertToBase($base)
@@ -177,8 +211,11 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @throws Exception\ArithmeticException if $number is zero
+     *
      * @link http://www.php.net/bcdiv
      */
     public function divide($number)
@@ -189,13 +226,11 @@ class BigNumber
             throw new Exception\ArithmeticException('Division by zero');
         }
 
-        $this->numberValue = bcdiv(
+        return $this->assignValue(bcdiv(
             $this->numberValue,
             $number,
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -203,6 +238,7 @@ class BigNumber
      * if necessary
      *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/floor
      */
     public function floor()
@@ -217,9 +253,7 @@ class BigNumber
             }
         }
 
-        $this->numberValue = bcadd($number, '0', 0);
-
-        return $this;
+        return $this->assignValue(bcadd($number, '0', 0));
     }
 
     /**
@@ -264,6 +298,7 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return bool
      */
     public function isEqualTo($number)
@@ -276,6 +311,7 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return bool
      */
     public function isGreaterThan($number)
@@ -288,6 +324,7 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return bool
      */
     public function isGreaterThanOrEqualTo($number)
@@ -300,6 +337,7 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return bool
      */
     public function isLessThan($number)
@@ -312,6 +350,7 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return bool
      */
     public function isLessThanOrEqualTo($number)
@@ -344,8 +383,11 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @throws Exception\ArithmeticException if $number is zero
+     *
      * @link http://www.php.net/bcmod
      */
     public function mod($number)
@@ -356,12 +398,10 @@ class BigNumber
             throw new Exception\ArithmeticException('Division by zero');
         }
 
-        $this->numberValue = bcmod(
+        return $this->assignValue(bcmod(
             $this->numberValue,
             $number
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -369,18 +409,18 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/bcmul
      */
     public function multiply($number)
     {
-        $this->numberValue = bcmul(
+        return $this->assignValue(bcmul(
             $this->numberValue,
             $this->filterNumber($number),
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -398,18 +438,18 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/bcpow
      */
     public function pow($number)
     {
-        $this->numberValue = bcpow(
+        return $this->assignValue(bcpow(
             $this->numberValue,
             $this->filterNumber($number),
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -430,8 +470,11 @@ class BigNumber
      *                   representation of a base 10 number
      * @param mixed $mod May be of any type that can be cast to a string
      *                   representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @throws Exception\ArithmeticException if $number is zero
+     *
      * @link http://www.php.net/bcpowmod
      */
     public function powMod($pow, $mod)
@@ -442,20 +485,19 @@ class BigNumber
             throw new Exception\ArithmeticException('Division by zero');
         }
 
-        $this->numberValue = bcpowmod(
+        return $this->assignValue(bcpowmod(
             $this->numberValue,
             $this->filterNumber($pow),
             $mod,
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
      * Rounds the current number to the nearest integer
      *
      * @return BigNumber for fluent interface
+     *
      * @todo Implement precision digits
      */
     public function round()
@@ -470,13 +512,11 @@ class BigNumber
             $roundedDiff = round($diff);
         }
 
-        $this->numberValue = bcadd(
+        return $this->assignValue(bcadd(
             $floored,
             $roundedDiff,
             0
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -484,6 +524,7 @@ class BigNumber
      *
      * @param int $scale Specifies the default number of digits after the decimal
      *                   place to be used in operations for this BigNumber
+     *
      * @return BigNumber for fluent interface
      */
     public function setScale($scale)
@@ -498,6 +539,7 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
      */
     public function setValue($number)
@@ -518,32 +560,30 @@ class BigNumber
      * Shifts the current number $bits to the left
      *
      * @param int $bits
+     *
      * @return BigNumber for fluent interface
      */
     public function shiftLeft($bits)
     {
-        $this->numberValue = bcmul(
+        return $this->assignValue(bcmul(
             $this->numberValue,
             bcpow('2', $bits)
-        );
-
-        return $this;
+        ));
     }
 
     /**
      * Shifts the current number $bits to the right
      *
      * @param int $bits
+     *
      * @return BigNumber for fluent interface
      */
     public function shiftRight($bits)
     {
-        $this->numberValue = bcdiv(
+        return $this->assignValue(bcdiv(
             $this->numberValue,
             bcpow('2', $bits)
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -566,16 +606,15 @@ class BigNumber
      * Finds the square root of the current number
      *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/bcsqrt
      */
     public function sqrt()
     {
-        $this->numberValue = bcsqrt(
+        return $this->assignValue(bcsqrt(
             $this->numberValue,
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
@@ -583,24 +622,25 @@ class BigNumber
      *
      * @param mixed $number May be of any type that can be cast to a string
      *                      representation of a base 10 number
+     *
      * @return BigNumber for fluent interface
+     *
      * @link http://www.php.net/bcsub
      */
     public function subtract($number)
     {
-        $this->numberValue = bcsub(
+        return $this->assignValue(bcsub(
             $this->numberValue,
             $this->filterNumber($number),
             $this->getScale()
-        );
-
-        return $this;
+        ));
     }
 
     /**
      * Filters a number, converting it to a string value
      *
      * @param mixed $number
+     *
      * @return string
      */
     protected function filterNumber($number)
@@ -618,6 +658,7 @@ class BigNumber
      * @param string|int $number The number to convert
      * @param int $fromBase (optional) The base $number is in; defaults to 10
      * @param int $toBase (optional) The base to convert $number to; defaults to 16
+     *
      * @return string
      */
     public static function baseConvert($number, $fromBase = 10, $toBase = 16)
@@ -632,7 +673,9 @@ class BigNumber
      *
      * @param string|int $number The number to convert
      * @param int $toBase The base to convert $number to
+     *
      * @return string
+     *
      * @throws \InvalidArgumentException if $toBase is outside the range 2 to 36
      */
     public static function convertFromBase10($number, $toBase)
@@ -666,7 +709,9 @@ class BigNumber
      *
      * @param string|int $number The number to convert
      * @param int $fromBase The base $number is in
+     *
      * @return string
+     *
      * @throws \InvalidArgumentException if $fromBase is outside the range 2 to 36
      */
     public static function convertToBase10($number, $fromBase)
@@ -702,6 +747,22 @@ class BigNumber
         }
 
         return $base10Num;
+    }
+
+    /**
+     * @param mixed $value
+     * @param null  $scale
+     * @param bool  $muttable
+     *
+     * @return BigNumber
+     */
+    public static function create($value, $scale = null, $muttable = true)
+    {
+        if ($value instanceof self) {
+            return new self($value->getValue(), $value->getScale(), $value->getMutable());
+        }
+
+        return new self($value, $scale, $muttable);
     }
 
     /**
