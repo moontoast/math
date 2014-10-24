@@ -14,7 +14,8 @@
         "ext-bcmath": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.1"
+        "phpunit/phpunit": "~4.1",
+        "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
         "psr-4": {"Moontoast\\Math\\": "src/Moontoast/Math/"}
