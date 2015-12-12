@@ -14,3 +14,4 @@ before_script:
 
 script:
   - phpunit --coverage-text
+  
