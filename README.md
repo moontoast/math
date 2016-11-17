@@ -1,6 +1,11 @@
 # Moontoast Math Library
 
-[![Build Status](https://travis-ci.org/ramsey/math.png)](https://travis-ci.org/ramsey/math)
+[![Source Code][badge-source]][source]
+[![Latest Version][badge-release]][release]
+[![Software License][badge-license]][license]
+[![Build Status][badge-build]][build]
+[![Coverage Status][badge-coverage]][coverage]
+[![Total Downloads][badge-downloads]][downloads]
 
 Moontoast\Math is useful for working with integers that are larger than
 (or may become larger than, through mathematical computations) PHP's max
@@ -87,3 +92,17 @@ limitations under the License.
 [bcmath extension]: http://php.net/bcmath
 [php-integers]: http://php.net/manual/en/language.types.integer.php
 [packagist]: http://packagist.org/
+
+[badge-source]: https://img.shields.io/badge/source-moontoast/math-blue.svg?style=flat-square
+[badge-release]: https://img.shields.io/packagist/v/moontoast/math.svg?style=flat-square
+[badge-license]: https://img.shields.io/github/license/ramsey/moontoast-math.svg?style=flat-square
+[badge-build]: https://img.shields.io/travis/ramsey/moontoast-math/master.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/coveralls/ramsey/moontoast-math/master.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/packagist/dt/moontoast/math.svg?style=flat-square
+
+[source]: https://github.com/ramsey/moontoast-math
+[release]: https://packagist.org/packages/moontoast/math
+[license]: https://github.com/ramsey/moontoast-math/blob/master/LICENSE
+[build]: https://travis-ci.org/ramsey/moontoast-math
+[coverage]: https://coveralls.io/r/ramsey/moontoast-math?branch=master
+[downloads]: https://packagist.org/packages/moontoast/math
