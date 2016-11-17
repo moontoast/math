@@ -680,7 +680,6 @@ class BigNumber
         $base10Num = '0';
 
         for ($i = $len; $i > 0; $i--) {
-
             $c = ord($number[$len - $i]);
 
             if ($c >= ord('0') && $c <= ord('9')) {
@@ -698,7 +697,6 @@ class BigNumber
             }
 
             $base10Num = bcadd(bcmul($base10Num, $fromBase), (string) $c);
-
         }
 
         return $base10Num;
