@@ -23,16 +23,10 @@ Moontoast\Math requires PHP 5.3+ and the [bcmath extension][].
 
 ## Installation
 
-The preferred method of installation is via [Packagist][], as this provides
-the PSR-0 autoloader functionality. The following `composer.json` will download
-and install the latest version of the Moontoast\Math library into your project:
+The preferred method of installation is via [Composer][]:
 
-```json
-{
-    "require": {
-        "moontoast/math": "*"
-    }
-}
+```
+composer require moontoast/math
 ```
 
 ## Examples
@@ -88,7 +82,7 @@ limitations under the License.
 
 [bcmath extension]: http://php.net/bcmath
 [php-integers]: http://php.net/manual/en/language.types.integer.php
-[packagist]: http://packagist.org/
+[composer]: https://getcomposer.org/
 
 [badge-source]: https://img.shields.io/badge/source-moontoast/math-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/packagist/v/moontoast/math.svg?style=flat-square
