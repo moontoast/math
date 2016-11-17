@@ -19,8 +19,6 @@ allowing one to perform mathematical calculations on numeric strings,
 going well outside the integer range of the system and maintaining arbitrary
 precision for more precise calculations.
 
-See the `docs/` directory for generated API documentation.
-
 Moontoast\Math requires PHP 5.3+ and the [bcmath extension][].
 
 ## Installation
