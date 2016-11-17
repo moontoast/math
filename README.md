@@ -86,7 +86,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-[phpdoc-md]: https://github.com/evert/phpdoc-md
 [bcmath extension]: http://php.net/bcmath
 [php-integers]: http://php.net/manual/en/language.types.integer.php
 [packagist]: http://packagist.org/
