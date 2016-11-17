@@ -1,12 +1,20 @@
-* 1.1.0 (2013-01-19)
+# moontoast/math Changelog
 
-  * Break: Division by zero now throws `\Moontoast\Math\Exception\ArithmeticException` instead of `\InvalidArgumentException`
-  * Regenerated API documentation to include `\Moontoast\Math\Exception\ArithmeticException`
+## 1.1.0
 
-* 1.0.1 (2013-01-16)
+_Released: 2013-01-19_
 
-  * Changed copyright name.
+* Break: Division by zero now throws `\Moontoast\Math\Exception\ArithmeticException` instead of `\InvalidArgumentException`
+* Regenerated API documentation to include `\Moontoast\Math\Exception\ArithmeticException`
 
-* 1.0.0 (2013-01-10)
+## 1.0.1
 
-  * Initial release
+_Released: 2013-01-16_
+
+* Changed copyright name.
+
+## 1.0.0
+
+_Released: 2013-01-10_
+
+* Initial release
