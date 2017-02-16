@@ -647,14 +647,14 @@ class BigNumber
         $outNumber = '';
         $returnDigitCount = 0;
 
-        while (bcdiv($number, bcpow($toBase, (string) $returnDigitCount)) > ($toBase - 1)) {
+        while (bcdiv($number, bcpow($toBase, (string) $returnDigitCount, 0), 0) > ($toBase - 1)) {
             $returnDigitCount++;
         }
 
         for ($i = $returnDigitCount; $i >= 0; $i--) {
-            $pow = bcpow($toBase, (string) $i);
-            $c = bcdiv($number, $pow);
-            $number = bcsub($number, bcmul($c, $pow));
+            $pow = bcpow($toBase, (string) $i, 0);
+            $c = bcdiv($number, $pow, 0);
+            $number = bcsub($number, bcmul($c, $pow, 0), 0);
             $outNumber .= $digits[(int) $c];
         }
 
@@ -696,7 +696,7 @@ class BigNumber
                 continue;
             }
 
-            $base10Num = bcadd(bcmul($base10Num, $fromBase), (string) $c);
+            $base10Num = bcadd(bcmul($base10Num, $fromBase, 0), (string) $c, 0);
         }
 
         return $base10Num;
