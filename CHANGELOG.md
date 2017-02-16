@@ -1,5 +1,11 @@
 # moontoast/math Changelog
 
+## 1.1.2
+
+_Released: 2017-02-16_
+
+* Fix issue where `convertToBase10()` and `convertFromBase10()` returned incorrect results if the global `bcmath.scale` value was set to something other than zero. See https://github.com/ramsey/uuid/issues/150.
+
 ## 1.1.1
 
 _Released: 2016-11-17_
