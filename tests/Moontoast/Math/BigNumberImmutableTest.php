@@ -558,14 +558,21 @@ class BigNumberImmutableImmutableTest extends TestCase
     {
         $bn = new BigNumberImmutable(1);
 
-        $this->assertSame($bn, $bn->shiftLeft(30));
-        $this->assertSame('1073741824', $bn->getValue());
-        $this->assertSame('4611686018427387904', $bn->shiftLeft(32)->getValue());
-        $this->assertSame('42535295865117307932921825928971026432', $bn->shiftLeft(63)->getValue());
-        $this->assertSame('784637716923335095479473677900958302012794430558004314112', $bn->shiftLeft(64)->getValue());
+        $bn2 = $bn->shiftLeft(30);
+        $this->assertNotSame($bn, $bn2);
+        $this->assertSame('1073741824', $bn2->getValue());
+        $bn3 = $bn2->shiftLeft(32);
+        $this->assertSame('4611686018427387904', $bn3->getValue());
+
+        $bn4 = $bn3->shiftLeft(63);
+        $this->assertSame('42535295865117307932921825928971026432', $bn4->getValue());
+
+        $bn5 = $bn4->shiftLeft(64);
+        $this->assertSame('784637716923335095479473677900958302012794430558004314112', $bn5->getValue());
+
         $this->assertSame(
             '3369993333393829974333376885877453834204643052817571560137951281152',
-            $bn->shiftLeft(32)->getValue()
+            $bn5->shiftLeft(32)->getValue()
         );
     }
 
@@ -576,12 +583,13 @@ class BigNumberImmutableImmutableTest extends TestCase
     {
         $bn = new BigNumberImmutable('3369993333393829974333376885877453834204643052817571560137951281152');
 
-        $this->assertSame($bn, $bn->shiftRight(32));
-        $this->assertSame('784637716923335095479473677900958302012794430558004314112', $bn->getValue());
-        $this->assertSame('42535295865117307932921825928971026432', $bn->shiftRight(64)->getValue());
-        $this->assertSame('4611686018427387904', $bn->shiftRight(63)->getValue());
-        $this->assertSame('1073741824', $bn->shiftRight(32)->getValue());
-        $this->assertSame('1', $bn->shiftRight(30)->getValue());
+        $bn2 = $bn->shiftRight(32);
+        $this->assertNotSame($bn, $bn2);
+        $this->assertSame('784637716923335095479473677900958302012794430558004314112', $bn2->getValue());
+        $this->assertSame('42535295865117307932921825928971026432', $bn2->shiftRight(64)->getValue());
+        $this->assertSame('4611686018427387904', $bn2->shiftRight(64)->shiftRight(63)->getValue());
+        $this->assertSame('1073741824', $bn2->shiftRight(64)->shiftRight(63)->shiftRight(32)->getValue());
+        $this->assertSame('1', $bn2->shiftRight(64)->shiftRight(63)->shiftRight(32)->shiftRight(30)->getValue());
     }
 
     /**
@@ -591,13 +599,12 @@ class BigNumberImmutableImmutableTest extends TestCase
     {
         $bn1 = new BigNumberImmutable(16);
         $bn2 = new BigNumberImmutable(17);
-        $bn3 = clone $bn2;
 
-        $this->assertSame($bn1, $bn1->sqrt());
-        $this->assertSame('4', $bn1->getValue());
+        $this->assertNotSame($bn1, $bn1->sqrt());
+        $this->assertSame('4', $bn1->sqrt()->getValue());
         $this->assertSame('4', $bn2->sqrt()->getValue());
 
-        $bn3->setScale(8);
+        $bn3 = $bn2->withScale(8);
         $this->assertSame('4.12310562', $bn3->sqrt()->getValue());
     }
 
@@ -608,10 +615,11 @@ class BigNumberImmutableImmutableTest extends TestCase
     {
         $bn = new BigNumberImmutable(2147483647);
 
-        $this->assertSame($bn, $bn->subtract('9223372036854775808'));
-        $this->assertSame('-9223372034707292161', $bn->getValue());
+        $bn2 = $bn->subtract('9223372036854775808');
+        $this->assertNotSame($bn, $bn2);
+        $this->assertSame('-9223372034707292161', $bn2->getValue());
 
-        $bn->setScale(3);
-        $this->assertSame('-9223372034707292163.250', $bn->subtract(2.25)->getValue());
+        $bn3 = $bn2->withScale(3);
+        $this->assertSame('-9223372034707292163.250', $bn3->subtract(2.25)->getValue());
     }
 }
