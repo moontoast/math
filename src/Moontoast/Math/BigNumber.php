@@ -643,22 +643,17 @@ class BigNumber
 
         $bn = new self($number);
         $number = $bn->abs()->getValue();
-        $digits = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         $outNumber = '';
-        $returnDigitCount = 0;
-
-        while (bcdiv($number, bcpow($toBase, (string) $returnDigitCount, 0), 0) > ($toBase - 1)) {
-            $returnDigitCount++;
+        
+        while (bccomp($number, $toBase) >= 0) {
+            $quotient = bcdiv($number, $toBase, 0);
+            $remainder = bcsub($number, bcmul($quotient, $toBase, 0), 0);
+            $outNumber = $chars[$remainder] . $outNumber;
+            $number = $quotient;
         }
 
-        for ($i = $returnDigitCount; $i >= 0; $i--) {
-            $pow = bcpow($toBase, (string) $i, 0);
-            $c = bcdiv($number, $pow, 0);
-            $number = bcsub($number, bcmul($c, $pow, 0), 0);
-            $outNumber .= $digits[(int) $c];
-        }
-
-        return $outNumber;
+        return $chars[(int) $number] . $outNumber;
     }
 
     /**
