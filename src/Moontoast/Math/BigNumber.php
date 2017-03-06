@@ -647,11 +647,9 @@ class BigNumber
         $outNumber = '';
         
         while (bccomp($number, $toBase) >= 0) {
-            list($number, $remainder) = array(
-                bcdiv($number, $toBase, 0),
-                bcmod($number, $toBase)
-            );
-            $outNumber = $chars[$remainder] . $outNumber;
+            $remainder = bcmod($number, $toBase);
+            $number = bcdiv($number, $toBase, 0);
+            $outNumber = $chars[(int) $remainder] . $outNumber;
         }
 
         return $chars[(int) $number] . $outNumber;
