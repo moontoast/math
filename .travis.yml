@@ -1,23 +1,25 @@
 language: php
 
-php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-  - nightly
-  - hhvm
-
 matrix:
+  fast_finish: true
   allow_failures:
     - php: nightly
+  include:
+    - php: 5.3
+    - php: 5.4
+    - php: 5.5
+    - php: 5.6
+    - php: 7.0
+    - php: 7.1
+      env:
+        - TEST_COVERAGE=true
+    - php: nightly
+    - php: hhvm
 
 sudo: false
 
 before_install:
-  - travis_retry composer self-update
+  - if [[ $TEST_COVERAGE != 'true' && "$(php --version | grep xdebug -ci)" -ge 1 ]]; then phpenv config-rm xdebug.ini ; fi
 
 install:
   - travis_retry composer install --no-interaction --prefer-dist
@@ -31,4 +33,4 @@ script:
   - ./vendor/bin/phpcs src tests --standard=psr2 -sp
 
 after_script:
-  - php vendor/bin/coveralls
+  - if [[ $TEST_COVERAGE == 'true' ]]; then php vendor/bin/coveralls ; fi
