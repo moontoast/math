@@ -39,11 +39,6 @@ class BigNumberImmutable extends AbstractBigNumber
         return $this->bigNumber->__toString();
     }
 
-    public function __clone()
-    {
-        $this->bigNumber = clone $this->bigNumber;
-    }
-
     /**
      * {@inheritdoc}
      */

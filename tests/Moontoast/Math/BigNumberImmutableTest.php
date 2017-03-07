@@ -622,4 +622,23 @@ class BigNumberImmutableImmutableTest extends TestCase
         $bn3 = $bn2->withScale(3);
         $this->assertSame('-9223372034707292163.250', $bn3->subtract(2.25)->getValue());
     }
+
+    public function testConstructorDoesntDirectlyWrapPassedMutableInstance()
+    {
+        $wrapped = new BigNumber(1);
+        $SUT = new BigNumberImmutable($wrapped);
+        $wrapped->setValue(2);
+        static::assertNotEquals($wrapped->getValue(), $SUT->getValue());
+        static::assertSame("2", $wrapped->getValue());
+        static::assertSame("1", $SUT->getValue());
+    }
+
+    public function testConstructorDoesUpdate0ScaleWithPassedMutableInstance()
+    {
+        $wrapped = new BigNumber(1, 2);
+        $SUT = new BigNumberImmutable($wrapped, 0);
+        static::assertNotSame($wrapped->getValue(), $SUT->getValue());
+        static::assertSame(0, $SUT->getScale());
+        static::assertSame("1", $SUT->getValue());
+    }
 }
