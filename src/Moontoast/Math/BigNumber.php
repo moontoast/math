@@ -79,11 +79,7 @@ class BigNumber extends AbstractBigNumber
      */
     public function abs()
     {
-        // Use substr() to find the negative sign at the beginning of the
-        // number, rather than using signum() to determine the sign.
-        if (substr($this->numberValue, 0, 1) === '-') {
-            $this->numberValue = substr($this->numberValue, 1);
-        }
+        $this->numberValue = ltrim($this->numberValue, '-');
 
         return $this;
     }
