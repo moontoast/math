@@ -5,7 +5,7 @@
 
 namespace Moontoast\Math;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class BigNumberImmutableImmutableTest extends TestCase
 {
