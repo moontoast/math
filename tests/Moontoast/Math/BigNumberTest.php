@@ -1,7 +1,9 @@
 <?php
 namespace Moontoast\Math;
 
-class BigNumberTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class BigNumberTest extends TestCase
 {
     protected function setUp()
     {
@@ -619,7 +621,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     {
         $fromBase = array(2, 8, 10, 16, 36);
         $toBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(10, 27, 39, 039, 0x5F, '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
+        $convertValues = array(10, 27, 39, '039', '0x5F', '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
 
         foreach ($fromBase as $from) {
             foreach ($toBase as $to) {
@@ -643,7 +645,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     public function testConvertFromBase10()
     {
         $toBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(10, 27, 39, 039, 0x5F, '10', '27', '39');
+        $convertValues = array(10, 27, 39, '039', '0x5F', '10', '27', '39');
 
         foreach ($toBase as $to) {
             foreach ($convertValues as $val) {
@@ -685,7 +687,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     public function testConvertFromBase10NegativeNumbers()
     {
         $toBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(-10, -27, -39, -039, -0x5F, '-10', '-27', '-39');
+        $convertValues = array(-10, -27, -39, '-039', '-0x5F', '-10', '-27', '-39');
 
         foreach ($toBase as $to) {
             foreach ($convertValues as $val) {
@@ -707,7 +709,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     public function testConvertToBase10()
     {
         $fromBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(10, 27, 39, 039, 0x5F, '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
+        $convertValues = array(10, 27, 39, '039', '0x5F', '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
 
         foreach ($fromBase as $from) {
             foreach ($convertValues as $val) {
@@ -767,7 +769,5 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
         $bn = new BigNumber('-0.0000005', 3);
 
         $this->assertSame('-0.000', $bn->getValue());
-        $this->assertEquals(-1, $bn->signum());
-        $this->assertTrue($bn->isNegative());
     }
 }
