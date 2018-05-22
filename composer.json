@@ -3,11 +3,18 @@
     "description": "A mathematics library, providing functionality for large numbers",
     "type": "library",
     "keywords": ["math", "bcmath"],
-    "homepage": "https://github.com/moontoast/math",
+    "homepage": "https://github.com/ramsey/moontoast-math",
     "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Ben Ramsey",
+            "email": "ben@benramsey.com",
+            "homepage": "https://benramsey.com"
+        }
+    ],
     "support": {
-        "issues": "https://github.com/moontoast/math/issues",
-        "source": "https://github.com/moontoast/math"
+        "issues": "https://github.com/ramsey/moontoast-math/issues",
+        "source": "https://github.com/ramsey/moontoast-math"
     },
     "require": {
         "php": ">=5.3.3",
