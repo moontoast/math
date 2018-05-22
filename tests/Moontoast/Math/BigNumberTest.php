@@ -1,7 +1,9 @@
 <?php
 namespace Moontoast\Math;
 
-class BigNumberTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class BigNumberTest extends TestCase
 {
     protected function setUp()
     {
@@ -545,7 +547,10 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('4611686018427387904', $bn->shiftLeft(32)->getValue());
         $this->assertSame('42535295865117307932921825928971026432', $bn->shiftLeft(63)->getValue());
         $this->assertSame('784637716923335095479473677900958302012794430558004314112', $bn->shiftLeft(64)->getValue());
-        $this->assertSame('3369993333393829974333376885877453834204643052817571560137951281152', $bn->shiftLeft(32)->getValue());
+        $this->assertSame(
+            '3369993333393829974333376885877453834204643052817571560137951281152',
+            $bn->shiftLeft(32)->getValue()
+        );
     }
 
     /**
@@ -619,7 +624,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     {
         $fromBase = array(2, 8, 10, 16, 36);
         $toBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(10, 27, 39, 039, 0x5F, '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
+        $convertValues = array(10, 27, 39, '039', '0x5F', '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
 
         foreach ($fromBase as $from) {
             foreach ($toBase as $to) {
@@ -627,7 +632,7 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
                     // Test that our baseConvert matches PHP's base_convert
                     $phpRes = base_convert($val, $from, $to);
                     $bnRes = BigNumber::baseConvert($val, $from, $to);
-                    $this->assertEquals(
+                    $this->assertSame(
                         $phpRes,
                         $bnRes,
                         "from base is {$from}, to base is {$to}, value is {$val}, baseConvert result is {$bnRes}"
@@ -643,14 +648,14 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     public function testConvertFromBase10()
     {
         $toBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(10, 27, 39, 039, 0x5F, '10', '27', '39');
+        $convertValues = array(10, 27, 39, '039', '0x5F', '10', '27', '39');
 
         foreach ($toBase as $to) {
             foreach ($convertValues as $val) {
                 // Test that our baseConvert matches PHP's base_convert
                 $phpRes = base_convert($val, 10, $to);
                 $bnRes = BigNumber::convertFromBase10($val, $to);
-                $this->assertEquals(
+                $this->assertSame(
                     $phpRes,
                     $bnRes,
                     "from base is 10, to base is {$to}, value is {$val}, convertFromBase10 result is {$bnRes}"
@@ -685,14 +690,14 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     public function testConvertFromBase10NegativeNumbers()
     {
         $toBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(-10, -27, -39, -039, -0x5F, '-10', '-27', '-39');
+        $convertValues = array(-10, -27, -39, '-039', '-0x5F', '-10', '-27', '-39');
 
         foreach ($toBase as $to) {
             foreach ($convertValues as $val) {
                 // Test that our baseConvert matches PHP's base_convert
                 $phpRes = base_convert($val, 10, $to);
                 $bnRes = BigNumber::convertFromBase10($val, $to);
-                $this->assertEquals(
+                $this->assertSame(
                     $phpRes,
                     $bnRes,
                     "from base is 10, to base is {$to}, value is {$val}, convertFromBase10 result is {$bnRes}"
@@ -707,14 +712,14 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
     public function testConvertToBase10()
     {
         $fromBase = array(2, 8, 10, 16, 36);
-        $convertValues = array(10, 27, 39, 039, 0x5F, '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
+        $convertValues = array(10, 27, 39, '039', '0x5F', '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
 
         foreach ($fromBase as $from) {
             foreach ($convertValues as $val) {
                 // Test that our baseConvert matches PHP's base_convert
                 $phpRes = base_convert($val, $from, 10);
                 $bnRes = BigNumber::convertToBase10($val, $from);
-                $this->assertEquals(
+                $this->assertSame(
                     $phpRes,
                     $bnRes,
                     "from base is {$from}, to base is 10, value is {$val}, convertToBase10 result is {$bnRes}"
@@ -767,7 +772,49 @@ class BigNumberTest extends \PHPUnit_Framework_TestCase
         $bn = new BigNumber('-0.0000005', 3);
 
         $this->assertSame('-0.000', $bn->getValue());
-        $this->assertEquals(-1, $bn->signum());
-        $this->assertTrue($bn->isNegative());
+    }
+
+    public function testConvertFromBase10AlwaysUsesZeroScale()
+    {
+        // Set global scale to 4; convertFromBase10() should not use this
+        ini_set('bcmath.scale', 4);
+
+        $toBase = array(2, 8, 10, 16, 36);
+        $convertValues = array(10, 27, 39, 037, 0x5F, '10', '27', '39');
+
+        foreach ($toBase as $to) {
+            foreach ($convertValues as $val) {
+                // Test that our baseConvert matches PHP's base_convert
+                $phpRes = base_convert($val, 10, $to);
+                $bnRes = BigNumber::convertFromBase10($val, $to);
+                $this->assertSame(
+                    $phpRes,
+                    $bnRes,
+                    "from base is 10, to base is {$to}, value is {$val}, convertFromBase10 result is {$bnRes}"
+                );
+            }
+        }
+    }
+
+    public function testConvertToBase10AlwaysUsesZeroScale()
+    {
+        // Set global scale to 4; convertToBase10() should not use this
+        ini_set('bcmath.scale', 4);
+
+        $fromBase = array(2, 8, 10, 16, 36);
+        $convertValues = array(10, 27, 39, 037, 0x5F, '10', '27', '39', '5F', '5f', '3XYZ', '3xyz', '5f$@');
+
+        foreach ($fromBase as $from) {
+            foreach ($convertValues as $val) {
+                // Test that our baseConvert matches PHP's base_convert
+                $phpRes = base_convert($val, $from, 10);
+                $bnRes = BigNumber::convertToBase10($val, $from);
+                $this->assertSame(
+                    $phpRes,
+                    $bnRes,
+                    "from base is {$from}, to base is 10, value is {$val}, convertToBase10 result is {$bnRes}"
+                );
+            }
+        }
     }
 }

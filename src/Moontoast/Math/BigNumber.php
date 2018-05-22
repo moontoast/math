@@ -2,7 +2,7 @@
 /**
  * This file is part of the Moontoast\Math library
  *
- * Copyright 2013 Moontoast, Inc.
+ * Copyright 2013-2016 Moontoast, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @copyright 2013 Moontoast, Inc.
- * @license http://alphabase.moontoast.com/licenses/apache-2.0.txt Apache 2.0
+ * @copyright 2013-2016 Moontoast, Inc.
+ * @license https://github.com/ramsey/moontoast-math/blob/master/LICENSE Apache 2.0
  */
 
 namespace Moontoast\Math;
@@ -27,7 +27,7 @@ namespace Moontoast\Math;
  *
  * @link http://www.php.net/bcmath
  */
-class BigNumber
+class BigNumber extends AbstractBigNumber
 {
     /**
      * Number value, as a string
@@ -79,11 +79,7 @@ class BigNumber
      */
     public function abs()
     {
-        // Use substr() to find the negative sign at the beginning of the
-        // number, rather than using signum() to determine the sign.
-        if (substr($this->numberValue, 0, 1) === '-') {
-            $this->numberValue = substr($this->numberValue, 1);
-        }
+        $this->numberValue = ltrim($this->numberValue, '-');
 
         return $this;
     }
@@ -257,86 +253,6 @@ class BigNumber
     public function increment()
     {
         return $this->add(1);
-    }
-
-    /**
-     * Returns true if the current number equals the given number
-     *
-     * @param mixed $number May be of any type that can be cast to a string
-     *                      representation of a base 10 number
-     * @return bool
-     */
-    public function isEqualTo($number)
-    {
-        return ($this->compareTo($number) == 0);
-    }
-
-    /**
-     * Returns true if the current number is greater than the given number
-     *
-     * @param mixed $number May be of any type that can be cast to a string
-     *                      representation of a base 10 number
-     * @return bool
-     */
-    public function isGreaterThan($number)
-    {
-        return ($this->compareTo($number) == 1);
-    }
-
-    /**
-     * Returns true if the current number is greater than or equal to the given number
-     *
-     * @param mixed $number May be of any type that can be cast to a string
-     *                      representation of a base 10 number
-     * @return bool
-     */
-    public function isGreaterThanOrEqualTo($number)
-    {
-        return ($this->compareTo($number) >= 0);
-    }
-
-    /**
-     * Returns true if the current number is less than the given number
-     *
-     * @param mixed $number May be of any type that can be cast to a string
-     *                      representation of a base 10 number
-     * @return bool
-     */
-    public function isLessThan($number)
-    {
-        return ($this->compareTo($number) == -1);
-    }
-
-    /**
-     * Returns true if the current number is less than or equal to the given number
-     *
-     * @param mixed $number May be of any type that can be cast to a string
-     *                      representation of a base 10 number
-     * @return bool
-     */
-    public function isLessThanOrEqualTo($number)
-    {
-        return ($this->compareTo($number) <= 0);
-    }
-
-    /**
-     * Returns true if the current number is a negative number
-     *
-     * @return bool
-     */
-    public function isNegative()
-    {
-        return ($this->signum() == -1);
-    }
-
-    /**
-     * Returns true if the current number is a positive number
-     *
-     * @return bool
-     */
-    public function isPositive()
-    {
-        return ($this->signum() == 1);
     }
 
     /**
@@ -547,22 +463,6 @@ class BigNumber
     }
 
     /**
-     * Returns the sign (signum) of the current number
-     *
-     * @return int -1, 0 or 1 as the value of this BigNumber is negative, zero or positive
-     */
-    public function signum()
-    {
-        if ($this->isGreaterThan(0)) {
-            return 1;
-        } elseif ($this->isLessThan(0)) {
-            return -1;
-        }
-
-        return 0;
-    }
-
-    /**
      * Finds the square root of the current number
      *
      * @return BigNumber for fluent interface
@@ -610,108 +510,5 @@ class BigNumber
             FILTER_SANITIZE_NUMBER_FLOAT,
             FILTER_FLAG_ALLOW_FRACTION
         );
-    }
-
-    /**
-     * Converts a number between arbitrary bases (from 2 to 36)
-     *
-     * @param string|int $number The number to convert
-     * @param int $fromBase (optional) The base $number is in; defaults to 10
-     * @param int $toBase (optional) The base to convert $number to; defaults to 16
-     * @return string
-     */
-    public static function baseConvert($number, $fromBase = 10, $toBase = 16)
-    {
-        $number = self::convertToBase10($number, $fromBase);
-
-        return self::convertFromBase10($number, $toBase);
-    }
-
-    /**
-     * Converts a base-10 number to an arbitrary base (from 2 to 36)
-     *
-     * @param string|int $number The number to convert
-     * @param int $toBase The base to convert $number to
-     * @return string
-     * @throws \InvalidArgumentException if $toBase is outside the range 2 to 36
-     */
-    public static function convertFromBase10($number, $toBase)
-    {
-        if ($toBase < 2 || $toBase > 36) {
-            throw new \InvalidArgumentException("Invalid `to base' ({$toBase})");
-        }
-
-        $bn = new self($number);
-        $number = $bn->abs()->getValue();
-        $digits = '0123456789abcdefghijklmnopqrstuvwxyz';
-        $outNumber = '';
-        $returnDigitCount = 0;
-
-        while (bcdiv($number, bcpow($toBase, (string) $returnDigitCount)) > ($toBase - 1)) {
-            $returnDigitCount++;
-        }
-
-        for ($i = $returnDigitCount; $i >= 0; $i--) {
-            $pow = bcpow($toBase, (string) $i);
-            $c = bcdiv($number, $pow);
-            $number = bcsub($number, bcmul($c, $pow));
-            $outNumber .= $digits[(int) $c];
-        }
-
-        return $outNumber;
-    }
-
-    /**
-     * Converts a number from an arbitrary base (from 2 to 36) to base 10
-     *
-     * @param string|int $number The number to convert
-     * @param int $fromBase The base $number is in
-     * @return string
-     * @throws \InvalidArgumentException if $fromBase is outside the range 2 to 36
-     */
-    public static function convertToBase10($number, $fromBase)
-    {
-        if ($fromBase < 2 || $fromBase > 36) {
-            throw new \InvalidArgumentException("Invalid `from base' ({$fromBase})");
-        }
-
-        $number = (string) $number;
-        $len = strlen($number);
-        $base10Num = '0';
-
-        for ($i = $len; $i > 0; $i--) {
-
-            $c = ord($number[$len - $i]);
-
-            if ($c >= ord('0') && $c <= ord('9')) {
-                $c -= ord('0');
-            } elseif ($c >= ord('A') && $c <= ord('Z')) {
-                $c -= ord('A') - 10;
-            } elseif ($c >= ord('a') && $c <= ord('z')) {
-                $c -= ord('a') - 10;
-            } else {
-                continue;
-            }
-
-            if ($c >= $fromBase) {
-                continue;
-            }
-
-            $base10Num = bcadd(bcmul($base10Num, $fromBase), (string) $c);
-
-        }
-
-        return $base10Num;
-    }
-
-    /**
-     * Changes the default scale used by all Binary Calculator functions
-     *
-     * @param int $scale
-     * @return void
-     */
-    public static function setDefaultScale($scale)
-    {
-        ini_set('bcmath.scale', $scale);
     }
 }

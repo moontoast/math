@@ -2,7 +2,7 @@
 /**
  * This file is part of the Moontoast\Math library
  *
- * Copyright 2013 Moontoast, Inc.
+ * Copyright 2013-2016 Moontoast, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @copyright 2013 Moontoast, Inc.
- * @license http://alphabase.moontoast.com/licenses/apache-2.0.txt Apache 2.0
+ * @copyright 2013-2016 Moontoast, Inc.
+ * @license https://github.com/ramsey/moontoast-math/blob/master/LICENSE Apache 2.0
  */
 
 namespace Moontoast\Math\Exception;

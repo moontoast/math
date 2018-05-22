@@ -1,6 +1,11 @@
 # Moontoast Math Library
 
-[![Build Status](https://travis-ci.org/moontoast/math.png)](https://travis-ci.org/moontoast/math)
+[![Source Code][badge-source]][source]
+[![Latest Version][badge-release]][release]
+[![Software License][badge-license]][license]
+[![Build Status][badge-build]][build]
+[![Coverage Status][badge-coverage]][coverage]
+[![Total Downloads][badge-downloads]][downloads]
 
 Moontoast\Math is useful for working with integers that are larger than
 (or may become larger than, through mathematical computations) PHP's max
@@ -14,22 +19,14 @@ allowing one to perform mathematical calculations on numeric strings,
 going well outside the integer range of the system and maintaining arbitrary
 precision for more precise calculations.
 
-See the `docs/` directory for generated API documentation.
-
 Moontoast\Math requires PHP 5.3+ and the [bcmath extension][].
 
 ## Installation
 
-The preferred method of installation is via [Packagist][], as this provides
-the PSR-0 autoloader functionality. The following `composer.json` will download
-and install the latest version of the Moontoast\Math library into your project:
+The preferred method of installation is via [Composer][]:
 
-```json
-{
-    "require": {
-        "moontoast/math": "*"
-    }
-}
+```
+composer require moontoast/math
 ```
 
 ## Examples
@@ -68,7 +65,7 @@ echo $bn; // 339532337419071774305803111643925486182
 
 ## License
 
-Copyright &copy; 2013 Moontoast, Inc.
+Copyright &copy; 2013-2016 Moontoast, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -83,7 +80,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-[phpdoc-md]: https://github.com/evert/phpdoc-md
 [bcmath extension]: http://php.net/bcmath
 [php-integers]: http://php.net/manual/en/language.types.integer.php
-[packagist]: http://packagist.org/
+[composer]: https://getcomposer.org/
+
+[badge-source]: https://img.shields.io/badge/source-moontoast/math-blue.svg?style=flat-square
+[badge-release]: https://img.shields.io/packagist/v/moontoast/math.svg?style=flat-square
+[badge-license]: https://img.shields.io/github/license/ramsey/moontoast-math.svg?style=flat-square
+[badge-build]: https://img.shields.io/travis/ramsey/moontoast-math/master.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/coveralls/ramsey/moontoast-math/master.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/packagist/dt/moontoast/math.svg?style=flat-square
+
+[source]: https://github.com/ramsey/moontoast-math
+[release]: https://packagist.org/packages/moontoast/math
+[license]: https://github.com/ramsey/moontoast-math/blob/master/LICENSE
+[build]: https://travis-ci.org/ramsey/moontoast-math
+[coverage]: https://coveralls.io/r/ramsey/moontoast-math?branch=master
+[downloads]: https://packagist.org/packages/moontoast/math
