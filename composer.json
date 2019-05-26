@@ -11,7 +11,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "ext-bcmath": "*"
+        "phpseclib/bcmath_compat": ">=1.0.0"
     },
     "autoload": {
         "psr-0": {"Moontoast\\Math": "src/"}
